@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swag of Horror</title>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #111; color: #eee; }
+    header { background: #1a1a1a; padding: 2rem; text-align: center; font-family: 'Creepster', cursive; font-size: 3rem; color: #e60000; }
+    nav { background: #222; padding: 1rem; text-align: center; }
+    nav a { color: #eee; margin: 0 1rem; text-decoration: none; cursor: pointer; }
+    nav a:hover { color: #e60000; }
+    section { padding: 2rem; display: none; }
+    section.active { display: block; }
+    .character { background: #1c1c1c; margin: 1rem 0; padding: 1rem; border-left: 4px solid #e60000; }
+    footer { background: #1a1a1a; text-align: center; padding: 1rem; color: #aaa; }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const links = document.querySelectorAll("nav a");
+      const sections = document.querySelectorAll("section");
+
+      function showSection(id) {
+        sections.forEach(sec => sec.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+      }
+
+      links.forEach(link => {
+        link.addEventListener("click", () => {
+          const target = link.getAttribute("data-target");
+          showSection(target);
+        });
+      });
+
+      showSection("home");
+    });
+
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key))) e.preventDefault();
+    });
+  </script>
+</head>
+<body>
+  <header>Swag of Horror</header>
+
+  <nav>
+    <a data-target="home">Home</a>
+    <a data-target="characters">Characters</a>
+    <a data-target="comics">Comics</a>
+    <a data-target="about">About</a>
+  </nav>
+
+  <section id="home">
+    <h2>Welcome to Swag of Horror!</h2>
+    <p>This is a spooky comic created by two students to bring joy and scares to the world. Enjoy the fun, the fright, and the fantastic stories!</p>
+  </section>
+
+  <section id="characters">
+    <div class="character">
+      <h2>The Scary Ghost</h2>
+      <p>The ghost whose look is very scary and is very scary until it saw the Brain Rot Kid.</p>
+    </div>
+    <div class="character">
+      <h2>The Brain Rot Kid</h2>
+      <p>A small kid who is a genius, and his brain is very rotted!!!</p>
+    </div>
+    <div class="character">
+      <h2>The Dummy</h2>
+      <p>The one who acts as if he's the leader, but actually he is a dummy!</p>
+    </div>
+  </section>
+
+  <section id="comics">
+    <h2>Check Our New Books</h2>
+    <p>New horror comics coming soon... Stay tuned!</p>
+  </section>
+
+  <section id="about">
+    <h2>About This Comic</h2>
+    <p>This is about a comic that is made by two students with the love of comics.<br>
+    This comic is basically made to make people happy worldwide.<br>
+    Hope you like our comics 😀</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Swag of Horror | Made by Two Students
+  </footer>
+</body>
+</html>
