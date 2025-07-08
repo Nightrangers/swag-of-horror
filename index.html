@@ -13,8 +13,14 @@
     nav a:hover { color: #e60000; }
     section { padding: 2rem; display: none; }
     section.active { display: block; }
+
     .character { background: #1c1c1c; margin: 1rem 0; padding: 1rem; border-left: 4px solid #e60000; }
-    footer { background: #1a1a1a; text-align: center; padding: 1rem; color: #aaa; }
+
+    /* The Whispers styling */
+    #whispers h1, #whispers h2 { color: crimson; }
+    .part { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #333; }
+
+    footer { background-color: #1a1a1a; text-align: center; padding: 1rem; color: #aaa; }
   </style>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -50,13 +56,16 @@
     <a data-target="characters">Characters</a>
     <a data-target="comics">Comics</a>
     <a data-target="about">About</a>
+    <a data-target="whispers">Demo Story</a>
   </nav>
 
+  <!-- HOME -->
   <section id="home">
     <h2>Welcome to Swag of Horror!</h2>
     <p>This is a spooky comic created by two students to bring joy and scares to the world. Enjoy the fun, the fright, and the fantastic stories!</p>
   </section>
 
+  <!-- CHARACTERS -->
   <section id="characters">
     <div class="character">
       <h2>The Scary Ghost</h2>
@@ -72,11 +81,13 @@
     </div>
   </section>
 
+  <!-- COMICS -->
   <section id="comics">
     <h2>Check Our New Books</h2>
     <p>New horror comics coming soon... Stay tuned!</p>
   </section>
 
+  <!-- ABOUT -->
   <section id="about">
     <h2>About This Comic</h2>
     <p>This is about a comic that is made by two students with the love of comics.<br>
@@ -84,8 +95,32 @@
     Hope you like our comics 😀</p>
   </section>
 
+  <!-- WHISPERS -->
+  <section id="whispers">
+    <h1>The Whispers</h1>
+    <p>A demo horror story in 40 chilling parts.</p>
+
+    <div class="part">
+      <h2>Part 1: The Whisper Begins</h2>
+      <p>Sarah moved into a new apartment. Whispers warned her to leave. One night, she vanished. Only a note remained: "I'm waiting."</p>
+    </div>
+
+    <div class="part">
+      <h2>Part 2: The Disappearance</h2>
+      <p>Police found her apartment empty. Walls carved with "I'm still here." More notes appeared. The whispers never stopped.</p>
+    </div>
+
+    <!-- You can paste parts 3–39 here if you have them -->
+
+    <div class="part">
+      <h2>Part 40: The Final Whisper</h2>
+      <p>Mirrors worldwide went black. Final message: "You opened the story. Now it belongs to you." The Whispers are done telling their story... now they want yours.</p>
+    </div>
+  </section>
+
   <footer>
     &copy; 2025 Swag of Horror | Made by Two Students
   </footer>
 </body>
 </html>
+
