@@ -1,126 +1,386 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Swag of Horror</title>
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-  <style>
-    body { margin: 0; font-family: Arial, sans-serif; background-color: #111; color: #eee; }
-    header { background: #1a1a1a; padding: 2rem; text-align: center; font-family: 'Creepster', cursive; font-size: 3rem; color: #e60000; }
-    nav { background: #222; padding: 1rem; text-align: center; }
-    nav a { color: #eee; margin: 0 1rem; text-decoration: none; cursor: pointer; }
-    nav a:hover { color: #e60000; }
-    section { padding: 2rem; display: none; }
-    section.active { display: block; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Swag of Horror</title>
 
-    .character { background: #1c1c1c; margin: 1rem 0; padding: 1rem; border-left: 4px solid #e60000; }
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 
-    /* The Whispers styling */
-    #whispers h1, #whispers h2 { color: crimson; }
-    .part { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #333; }
+<style>
+body { margin:0; font-family:Arial, sans-serif; background:#111; color:#eee; }
 
-    footer { background-color: #1a1a1a; text-align: center; padding: 1rem; color: #aaa; }
-  </style>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const links = document.querySelectorAll("nav a");
-      const sections = document.querySelectorAll("section");
+header {
+  background:#1a1a1a; padding:2rem; text-align:center;
+  font-family:'Creepster', cursive; font-size:3rem; color:#e60000;
+}
 
-      function showSection(id) {
-        sections.forEach(sec => sec.classList.remove("active"));
-        document.getElementById(id).classList.add("active");
-      }
+nav { background:#222; padding:1rem; text-align:center; }
+nav a { color:#eee; margin:0 1rem; cursor:pointer; }
+nav a:hover { color:#e60000; }
 
-      links.forEach(link => {
-        link.addEventListener("click", () => {
-          const target = link.getAttribute("data-target");
-          showSection(target);
-        });
-      });
+section { padding:2rem; display:none; }
+section.active { display:block; }
 
-      showSection("home");
-    });
+.character,.joke,.game-box {
+  background:#1c1c1c; padding:1rem; margin:1rem 0;
+  border-left:4px solid #e60000;
+}
 
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", e => {
-      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key))) e.preventDefault();
-    });
-  </script>
+button.red-btn {
+  background:#e60000; color:white; border:none;
+  padding:10px 20px; margin:6px; cursor:pointer;
+  border-radius:5px; font-size:16px;
+}
+
+footer {
+  background:#1a1a1a; text-align:center;
+  padding:1rem; color:#aaa; font-size:0.9rem;
+}
+</style>
+
+<script>
+function showSection(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* ================= REACTION TEST ================= */
+let reactionStart = 0;
+let reactionReady = false;
+let reactionTimeout = null;
+
+function reactionRating(ms){
+  if (ms < 180) return "👑 GOD TIER REFLEXES";
+  if (ms < 250) return "⚡ ELITE REFLEXES";
+  if (ms < 320) return "🔥 FAST";
+  if (ms < 450) return "😐 AVERAGE";
+  if (ms < 600) return "Go practice bro 💀";
+  return "💀 NPC REFLEXES";
+}
+
+function startReaction(){
+  const box = document.getElementById("reactionBox");
+  const result = document.getElementById("reactionResult");
+
+  result.innerHTML = "";
+  box.innerText = "WAIT...";
+  box.style.background = "#444";
+  reactionReady = false;
+
+  if (reactionTimeout) clearTimeout(reactionTimeout);
+
+  reactionTimeout = setTimeout(()=>{
+    box.innerText = "CLICK!";
+    box.style.background = "#0a0";
+    reactionStart = performance.now();
+    reactionReady = true;
+  }, Math.random()*3000 + 2000);
+}
+
+function clickReaction(){
+  const box = document.getElementById("reactionBox");
+  const result = document.getElementById("reactionResult");
+
+  if(!reactionReady){
+    result.innerHTML = "<span style='color:#ff4444;font-weight:bold;'>Too Early! 😭</span>";
+    box.innerText = "CLICK TO START";
+    box.style.background = "#444";
+    return;
+  }
+
+  const ms = Math.round(performance.now() - reactionStart);
+
+  result.innerHTML =
+    "Reaction Time: <span style='color:#e60000;font-size:22px;font-weight:bold'>" 
+    + ms + " ms</span><br>" +
+    "<b>" + reactionRating(ms) + "</b>";
+
+  box.innerText = "CLICK TO START";
+  box.style.background = "#444";
+  reactionReady = false;
+}
+
+/* ================= LUCK METER ================= */
+function auraRating(luck){
+  if (luck <= 15) return "💀 Negative Aura";
+  if (luck <= 35) return "🧍 NPC Aura";
+  if (luck <= 55) return "😐 Neutral Aura";
+  if (luck <= 75) return "😎 Chill Aura";
+  if (luck <= 90) return "🔥 Main Character Aura";
+  if (luck < 100) return "👑 Sigma Aura";
+  return "🌌 UNIVERSE FAVORITE";
+}
+
+function playLuck(){
+  const luck = Math.floor(Math.random()*101);
+  document.getElementById("luckBar").style.width = luck + "%";
+
+  document.getElementById("luckText").innerHTML =
+    "Luck: <b>" + luck + "%</b><br>" +
+    "<span style='color:#e60000;font-weight:bold'>" + auraRating(luck) + "</span>";
+}
+
+/* ================= CLICK SPEED ================= */
+let clicks = 0;
+let running = false;
+let countdownInterval = null;
+
+function startClick(){
+  clicks = 0;
+  running = false;
+
+  document.getElementById("clickCount").innerText = "0";
+  document.getElementById("clickResult").innerHTML = "";
+
+  let countdown = 5;
+  document.getElementById("clickResult").innerHTML =
+    "<span style='font-size:28px;font-weight:bold'>" + countdown + "</span>";
+
+  countdownInterval = setInterval(function(){
+    countdown--;
+
+    if(countdown > 0){
+      document.getElementById("clickResult").innerHTML =
+        "<span style='font-size:28px;font-weight:bold'>" + countdown + "</span>";
+    }
+    else if(countdown === 0){
+      document.getElementById("clickResult").innerHTML =
+        "<span style='color:#e60000;font-size:30px;font-weight:bold'>GO!</span>";
+
+      running = true;
+
+      setTimeout(function(){
+        running = false;
+
+        let rating = "";
+
+        if (clicks >= 60) rating = "👑 INSANE CLICKER";
+        else if (clicks >= 45) rating = "🔥 PRO CLICKER";
+        else if (clicks >= 30) rating = "😎 FAST HANDS";
+        else if (clicks >= 15) rating = "😐 AVERAGE";
+        else rating = "Go practice bro 💀";
+
+        document.getElementById("clickResult").innerHTML =
+          "Score: <b>" + clicks + "</b> clicks in 5 seconds<br>" +
+          "<span style='color:#e60000;font-weight:bold'>" + rating + "</span>";
+
+      },5000);
+    }
+    else{
+      clearInterval(countdownInterval);
+    }
+
+  },1000);
+}
+
+function countClick(){
+  if(running){
+    clicks++;
+    document.getElementById("clickCount").innerText = clicks;
+  }
+}
+
+/* ================= FLAPPY GHOST ================= */
+let ghostY = 200;
+let velocity = 0;
+let gravity = 0.6;
+let lift = -10;
+let flappyInterval = null;
+let obstacleX = 400;
+let gap = 150;
+let score = 0;
+let level = 1;
+let gameRunning = false;
+
+function startFlappy(selectedLevel){
+  if(gameRunning) return;
+
+  level = selectedLevel;
+  gameRunning = true;
+  score = 0;
+  ghostY = 200;
+  velocity = 0;
+  obstacleX = 400;
+
+  if(level === 1){ gravity = 0.6; gap = 170; }
+  if(level === 2){ gravity = 0.8; gap = 140; }
+  if(level === 3){ gravity = 1; gap = 110; }
+
+  document.getElementById("flappyScore").innerText = "Score: 0";
+
+  if(flappyInterval) clearInterval(flappyInterval);
+  flappyInterval = setInterval(updateFlappy, 20);
+}
+
+function jump(){
+  if(gameRunning){
+    velocity = lift;
+  }
+}
+
+function updateFlappy(){
+  velocity += gravity;
+  ghostY += velocity;
+  obstacleX -= 4 + level;
+
+  if(obstacleX < -50){
+    obstacleX = 400;
+    score++;
+    document.getElementById("flappyScore").innerText = "Score: " + score;
+  }
+
+  const canvas = document.getElementById("flappyCanvas");
+  const ctx = canvas.getContext("2d");
+
+  ctx.clearRect(0,0,400,400);
+
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+  ctx.arc(80, ghostY, 15, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle = "#e60000";
+  ctx.fillRect(obstacleX, 0, 40, 200 - gap/2);
+  ctx.fillRect(obstacleX, 200 + gap/2, 40, 400);
+
+  if(
+    ghostY > 400 || ghostY < 0 ||
+    (obstacleX < 95 && obstacleX + 40 > 65 &&
+     (ghostY < 200 - gap/2 || ghostY > 200 + gap/2))
+  ){
+    clearInterval(flappyInterval);
+    gameRunning = false;
+    document.getElementById("flappyScore").innerText += " — GAME OVER";
+  }
+}
+
+document.addEventListener("keydown", function(e){
+  if(e.code === "Space"){
+    jump();
+  }
+});
+</script>
 </head>
+
 <body>
-  <header>Swag of Horror</header>
 
-  <nav>
-    <a data-target="home">Home</a>
-    <a data-target="characters">Characters</a>
-    <a data-target="comics">Comics</a>
-    <a data-target="about">About</a>
-    <a data-target="whispers">Demo Story</a>
-  </nav>
+<header>Swag of Horror</header>
 
-  <!-- HOME -->
-  <section id="home">
-    <h2>Welcome to Swag of Horror!</h2>
-    <p>This is a spooky comic created by two students to bring joy and scares to the world. Enjoy the fun, the fright, and the fantastic stories!</p>
-  </section>
+<nav>
+  <a onclick="showSection('home')">Home</a>
+  <a onclick="showSection('about')">About</a>
+  <a onclick="showSection('characters')">Characters</a>
+  <a onclick="showSection('comix')">Comix</a>
+  <a onclick="showSection('story')">The Horror Story</a>
+  <a onclick="showSection('jokes')">Jokes</a>
+  <a onclick="showSection('games')">Games</a>
+  <a onclick="showSection('credits')">Credits</a>
+</nav>
 
-  <!-- CHARACTERS -->
-  <section id="characters">
-    <div class="character">
-      <h2>The Scary Ghost</h2>
-      <p>The ghost whose look is very scary and is very scary until it saw the Brain Rot Kid.</p>
-    </div>
-    <div class="character">
-      <h2>The Brain Rot Kid</h2>
-      <p>A small kid who is a genius, and his brain is very rotted!!!</p>
-    </div>
-    <div class="character">
-      <h2>The Dummy</h2>
-      <p>The one who acts as if he's the leader, but actually he is a dummy!</p>
-    </div>
-  </section>
+<section id="home" class="active">
+<h2>Welcome to Swag of Horror</h2>
+<p>This horror website is created by <b>three students with the love of horror experiences</b> to entertain and make people laugh worldwide.</p>
+</section>
 
-  <!-- COMICS -->
-  <section id="comics">
-    <h2>Check Our New Books</h2>
-    <p>New horror comics coming soon... Stay tuned!</p>
-  </section>
+<section id="about">
+<h2>About</h2>
+<p>A creative mix of horror, humor, comics, and fun mini-games.</p>
+</section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <h2>About This Comic</h2>
-    <p>This is about a comic that is made by two students with the love of comics.<br>
-    This comic is basically made to make people happy worldwide.<br>
-    Hope you like our comics 😀</p>
-  </section>
+<section id="characters">
+<div class="character"><h3>The Scary Ghost</h3><p>The ghost which shouldn't be disturbed!.</p></div>
+<div class="character"><h3>The Brain Rot Kid (or the zalpha kid)</h3><p>Is a genius,exept to stop talking nonsense.</p></div>
+<div class="character"><h3>The Dummy</h3><p>The brother of the brain rot kid.</p></div>
+</section>
 
-  <!-- WHISPERS -->
-  <section id="whispers">
-    <h1>The Whispers</h1>
-    <p>A demo horror story in 40 chilling parts.</p>
+<section id="comix">
+<h2>Comix</h2>
+<p>More horror comix coming soon.</p>
+</section>
 
-    <div class="part">
-      <h2>Part 1: The Whisper Begins</h2>
-      <p>Sarah moved into a new apartment. Whispers warned her to leave. One night, she vanished. Only a note remained: "I'm waiting."</p>
-    </div>
+<section id="story">
+<h1>The Horror Story: The Second Shadow</h1>
+<p>The room was quiet except for the ticking clock on the wall.</p>
+<p>The lights were off, and the window was slightly open, letting in the cool night air.</p>
+<p>At exactly 12:00 AM, the streetlight outside turned on.</p>
+<p>A shadow stretched across the wall.</p>
+<p>At first, nothing seemed wrong.</p>
+<p>The shadow moved when Alex moved.</p>
+<p>It stopped when Alex stopped.</p>
+<p>Then something changed.</p>
+<p>A second shadow slowly formed beside the first.</p>
+<p>There was only one light.<br>Only one person.</p>
+<p>Alex stood perfectly still.</p>
+<p>One shadow copied the stillness.</p>
+<p>The other did not.</p>
+<p>It bent its head, as if noticing the room for the first time.</p>
+<p>Its shape twitched, stretching longer than it should.</p>
+<p>The air felt heavier.</p>
+<p>Breathing sounded louder.</p>
+<p>The streetlight flickered once.</p>
+<p>When it turned back on, only one shadow remained on the wall.</p>
+<p>The room felt normal again.</p>
+<p>Relieved, Alex stepped away from the wall—</p>
+<p><b>And felt no shadow follow.</b></p>
+</section>
 
-    <div class="part">
-      <h2>Part 2: The Disappearance</h2>
-      <p>Police found her apartment empty. Walls carved with "I'm still here." More notes appeared. The whispers never stopped.</p>
-    </div>
+<section id="jokes">
+<h2>Jokes</h2>
+<div class="joke">My parents say “use your brain”. Bro, if it worked, I wouldn’t be here.</div>
+<div class="joke">Homework exists because teachers hate free time.</div>
+<div class="joke">“This is easy” ruined my confidence.</div>
+<div class="joke">I wake up against my will.</div>
+<div class="joke">I put things somewhere safe. Never see them again.</div>
+</section>
 
-    <!-- You can paste parts 3–39 here if you have them -->
+<section id="games">
+<h2>Games</h2>
 
-    <div class="part">
-      <h2>Part 40: The Final Whisper</h2>
-      <p>Mirrors worldwide went black. Final message: "You opened the story. Now it belongs to you." The Whispers are done telling their story... now they want yours.</p>
-    </div>
-  </section>
+<div class="game-box">
+<h3>Reaction Test</h3>
+<div id="reactionBox" onclick="clickReaction()" style="padding:20px;text-align:center;background:#444;cursor:pointer">
+CLICK TO START
+</div>
+<button class="red-btn" onclick="startReaction()">Play</button>
+<p id="reactionResult"></p>
+</div>
 
-  <footer>
-    &copy; 2025 Swag of Horror | Made by Two Students
-  </footer>
+<div class="game-box">
+<h3>Luck Meter</h3>
+<div style="background:#333;height:20px">
+<div id="luckBar" style="background:#e60000;height:100%;width:0%"></div>
+</div>
+<p id="luckText">Luck: --%</p>
+<button class="red-btn" onclick="playLuck()">Play</button>
+</div>
+
+<div class="game-box">
+<h3>Click Speed (click within 5 seconds!)</h3>
+<h1 id="clickCount">0</h1>
+<p id="clickResult"></p>
+<button class="red-btn" onclick="startClick()">Play</button>
+<button class="red-btn" onclick="countClick()">CLICK</button>
+</div>
+
+<div class="game-box">
+<h3>FlappyGhost (Press Space to Fly)</h3>
+<canvas id="flappyCanvas" width="400" height="400" style="background:#222;border:2px solid #e60000;"></canvas>
+<p id="flappyScore">Score: 0</p>
+<button class="red-btn" onclick="startFlappy(1)">Level 1</button>
+<button class="red-btn" onclick="startFlappy(2)">Level 2</button>
+<button class="red-btn" onclick="startFlappy(3)">Level 3</button>
+</div>
+
+</section>
+
+<section id="credits">
+<h2>Credits</h2>
+<p>Thanks to all friends who helped with ideas and testing.</p>
+</section>
+
+<footer>&copy; 2025 Swag of Horror</footer>
+
 </body>
 </html>
 
